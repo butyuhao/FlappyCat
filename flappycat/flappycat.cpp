@@ -12,95 +12,95 @@ using namespace std;
 
 
 
-//È«¾Öº¯Êı
-void print_obstacle(); // ¸üĞÂÕÏ°­ÎïµÄÎ»ÖÃ
-void hit_detection();	// ¼ì²âĞ¡ÄñÊÇ·ñ×²µ½ÁËÕÏ°­Îï
-void bird_jump();		//¿ØÖÆÄñµÄÏÂ½µºÍÉÏÉı
-void score_print();		//¸üĞÂÓÎÏ·½çÃæÉÏµÄ·ÖÊıÏÔÊ¾
-void endorretry();		//ÓÎÏ·½áÊø
+//å…¨å±€å‡½æ•°
+void print_obstacle(); // æ›´æ–°éšœç¢ç‰©çš„ä½ç½®
+void hit_detection();	// æ£€æµ‹å°é¸Ÿæ˜¯å¦æ’åˆ°äº†éšœç¢ç‰©
+void bird_jump();		//æ§åˆ¶é¸Ÿçš„ä¸‹é™å’Œä¸Šå‡
+void score_print();		//æ›´æ–°æ¸¸æˆç•Œé¢ä¸Šçš„åˆ†æ•°æ˜¾ç¤º
+void endorretry();		//æ¸¸æˆç»“æŸ
 
 
-//ĞÂÌí¼ÓµÄº¯Êı
-void print();			//»æÖÆÓÎÏ·½çÃæËùÓĞÍ¼ĞÎ
-void login();			//µÇÂ¼
-void init();			//ÔØÈë×î³õ½çÃæµÄÒôÀÖºÍ±³¾°
-int choose();			//Ñ¡Ôñ
-void play();			//½øÈëÓÎÏ·
-void _rank();			//½øÈëÅÅĞĞ°ñ
-void set();				//½øÈëÉèÖÃ
-void show();			//½øÈëÓÎÏ·Íæ·¨
-void back();			//·µ»Øµ½Ö÷½çÃæ
+//æ–°æ·»åŠ çš„å‡½æ•°
+void print();			//ç»˜åˆ¶æ¸¸æˆç•Œé¢æ‰€æœ‰å›¾å½¢
+bool login();			//ç™»å½•
+void init();			//è½½å…¥æœ€åˆç•Œé¢çš„éŸ³ä¹å’ŒèƒŒæ™¯
+int choose();			//é€‰æ‹©
+void play();			//è¿›å…¥æ¸¸æˆ
+void _rank();			//è¿›å…¥æ’è¡Œæ¦œ
+void set();				//è¿›å…¥è®¾ç½®
+void show();			//è¿›å…¥æ¸¸æˆç©æ³•
+void back();			//è¿”å›åˆ°ä¸»ç•Œé¢
 
 DWORD WINAPI init_dynamic(LPVOID);
 
 
-//È«¾Ö±äÁ¿
-string nickname = "";   // Íæ¼ÒêÇ³Æ
-int option = 0;			//Êó±êÑ¡ÔñÄÄ¸öÑ¡Ïî
-int flag_init = 0;			//0±íÊ¾Ö÷½çÃæ±³¾°£¨×ÓÏß³Ì£©²»½áÊø
+//å…¨å±€å˜é‡
+string nickname = "";   // ç©å®¶æ˜µç§°
+int option = 0;			//é¼ æ ‡é€‰æ‹©å“ªä¸ªé€‰é¡¹
+int flag_init = 0;			//0è¡¨ç¤ºä¸»ç•Œé¢èƒŒæ™¯ï¼ˆå­çº¿ç¨‹ï¼‰ä¸ç»“æŸ
 
-int bird_x = 150, bird_y = 300, i = 0, k = 0     ;//ÄñµÄ×óÉÏ½Ç×ø±ê,iÊÇimage bird1[]µÄÔªËØÎ»ÖÃ£¬kÊÇµ½5¹é0£¬ÊµÏÖĞ¡Äñ³á°òµÄÑ­»·
-int score = 0, t = 0;	//socre£º·ÖÊı  t£º
-int stone_x1, stone_y1;	//ÉÏ½ØÖù×Ó×óÏÂ½Ç×ø±ê
-int stone_x2 = -800, stone_y2;	//ÏÂ½ØÖù×Ó×óÉÏ½Ç×ø±ê
+int bird_x = 150, bird_y = 300, i = 0, k = 0     ;//é¸Ÿçš„å·¦ä¸Šè§’åæ ‡,iæ˜¯image bird1[]çš„å…ƒç´ ä½ç½®ï¼Œkæ˜¯åˆ°5å½’0ï¼Œå®ç°å°é¸Ÿç¿…è†€çš„å¾ªç¯
+int score = 0, t = 0;	//socreï¼šåˆ†æ•°  tï¼š
+int stone_x1, stone_y1;	//ä¸ŠæˆªæŸ±å­å·¦ä¸‹è§’åæ ‡
+int stone_x2 = -800, stone_y2;	//ä¸‹æˆªæŸ±å­å·¦ä¸Šè§’åæ ‡
 
-IMAGE  title, start, ranking, setting,showing,background,showbackground, goback,  //ÕâĞ©ÊÇ×öÖ÷½çÃæĞÂ¼ÓµÄ
+IMAGE  title, start, ranking, setting,showing,background,showbackground, goback,  //è¿™äº›æ˜¯åšä¸»ç•Œé¢æ–°åŠ çš„
 bird1[4], bird2[4], score1[10], score2[10], stone_up1, stone_up2, stone_down1, stone_down2
-, stone_up3, stone_up4, stone_down3, stone_down4;//Í¼Æ¬´¢´æ±äÁ¿
+, stone_up3, stone_up4, stone_down3, stone_down4;//å›¾ç‰‡å‚¨å­˜å˜é‡
 
 
-ExMessage m;		// ¶¨ÒåÊó±êÏûÏ¢
+ExMessage m;		// å®šä¹‰é¼ æ ‡æ¶ˆæ¯
 
 
-//Ö÷½çÃæµÄÑ©»¨£¨¿ÉÒÔ²Î¿¼easyx°ïÖúÎÄµµÀïµÄÁ÷ĞÇÊ¾Àı£¬Ïà²î²»´ó£©
+//ä¸»ç•Œé¢çš„é›ªèŠ±ï¼ˆå¯ä»¥å‚è€ƒeasyxå¸®åŠ©æ–‡æ¡£é‡Œçš„æµæ˜Ÿç¤ºä¾‹ï¼Œç›¸å·®ä¸å¤§ï¼‰
 
-#define MAXSNOW 200	// Ñ©»¨×ÜÊı
+#define MAXSNOW 200	// é›ªèŠ±æ€»æ•°
 struct SNOW
 {
-	double	x;    //×ø±ê
+	double	x;    //åæ ‡
 	int		y;
-	double	step; //²½³¤£ºÃ¿´ÎË¢ĞÂÒÆ¶¯µÄºáÏò¾àÀë
+	double	step; //æ­¥é•¿ï¼šæ¯æ¬¡åˆ·æ–°ç§»åŠ¨çš„æ¨ªå‘è·ç¦»
 };
 
-SNOW snow[MAXSNOW]; //ÉèÖÃÈ«¾Ö±äÁ¿snow
+SNOW snow[MAXSNOW]; //è®¾ç½®å…¨å±€å˜é‡snow
 
-// ³õÊ¼»¯Ñ©»¨
+// åˆå§‹åŒ–é›ªèŠ±
 void InitSnow(int i)
 {
-	snow[i].x = 0;               //Ò»¿ªÊ¼x×ø±êÊÇ0£¬ÒòÎªºóĞø¸üĞÂ£¬Ñ©»¨¶¼ÊÇ´Ó×óÍùÓÒ¿ªÊ¼×ß£»Ò»¿ªÊ¼²»ÊÇµÄ
+	snow[i].x = 0;               //ä¸€å¼€å§‹xåæ ‡æ˜¯0ï¼Œå› ä¸ºåç»­æ›´æ–°ï¼Œé›ªèŠ±éƒ½æ˜¯ä»å·¦å¾€å³å¼€å§‹èµ°ï¼›ä¸€å¼€å§‹ä¸æ˜¯çš„
 	snow[i].y = rand() % 600;
-	snow[i].step = (rand() % 5000) / 4000.0 + 1;  //²½³¤
+	snow[i].step = (rand() % 5000) / 4000.0 + 1;  //æ­¥é•¿
 }
 
-// ÒÆ¶¯Ñ©»¨
+// ç§»åŠ¨é›ªèŠ±
 void MoveSnow(int i)
 {
-	snow[i].x += snow[i].step;              //½øÈëmovesnowÊ×ÏÈ¸üĞÂÒ»ÏÂÃ¿¸öÑ©»¨µÄÎ»ÖÃ
-	if (snow[i].x > 350)	InitSnow(i);    //µ±³¬³ö½çÃæºó£¬´Ó×î×ó±ßÖØĞÂ³öÏÖ
+	snow[i].x += snow[i].step;              //è¿›å…¥movesnowé¦–å…ˆæ›´æ–°ä¸€ä¸‹æ¯ä¸ªé›ªèŠ±çš„ä½ç½®
+	if (snow[i].x > 350)	InitSnow(i);    //å½“è¶…å‡ºç•Œé¢åï¼Œä»æœ€å·¦è¾¹é‡æ–°å‡ºç°
 
-	// »­ĞÂÑ©»¨
-	fillcircle((int)snow[i].x, snow[i].y, 1); //¾ÍÊÇ»­¸öÈ¦
+	// ç”»æ–°é›ªèŠ±
+	fillcircle((int)snow[i].x, snow[i].y, 1); //å°±æ˜¯ç”»ä¸ªåœˆ
 }
 
-void init() //ÔØÈëÖ÷½çÃæ±³¾°
+void init() //è½½å…¥ä¸»ç•Œé¢èƒŒæ™¯
 {
-	loadimage(&background, "./source/initground.jpg");//ÔØÈë±³¾°Í¼
-	loadimage(&title, "./source/title.png", 270, 60);//ÔØÈë±êÌâÍ¼Æ¬
-	loadimage(&start, "./source/start_1.png");//ÔØÈë¿ªÊ¼°´Å¥
-	loadimage(&ranking, "./source/rank_1.png");//ÔØÈëÅÅĞĞ°ñ°´Å¥
-	loadimage(&setting, "./source/setting_1.png");//ÔØÈëÉèÖÃ°´Å¥
-	loadimage(&showing, "./source/show_1.png");//ÔØÈëÓÎÏ·Íæ·¨°´Å¥
-	loadimage(&goback, "./source/back_1.png");//ÔØÈëºóÍË°´Å¥
+	loadimage(&background, "./source/initground.jpg");//è½½å…¥èƒŒæ™¯å›¾
+	loadimage(&title, "./source/title.png", 270, 60);//è½½å…¥æ ‡é¢˜å›¾ç‰‡
+	loadimage(&start, "./source/start_1.png");//è½½å…¥å¼€å§‹æŒ‰é’®
+	loadimage(&ranking, "./source/rank_1.png");//è½½å…¥æ’è¡Œæ¦œæŒ‰é’®
+	loadimage(&setting, "./source/setting_1.png");//è½½å…¥è®¾ç½®æŒ‰é’®
+	loadimage(&showing, "./source/show_1.png");//è½½å…¥æ¸¸æˆç©æ³•æŒ‰é’®
+	loadimage(&goback, "./source/back_1.png");//è½½å…¥åé€€æŒ‰é’®
 
-	putimage(0, 0, &background);//·ÅÈë±³¾°Í¼
-	putimage((350 - title.getwidth()) / 2, 100, &title, SRCPAINT);  //·ÅÈë±êÌâÍ¼Æ¬,Óë±³¾°È¡or
-	putimage((350 - start.getwidth()) / 2, 230, &start);//·ÅÈë¿ªÊ¼°´Å¥
-	putimage((350 - ranking.getwidth()) / 2, 300, &ranking);//·ÅÈëÅÅĞĞ°ñ°´Å¥
-	putimage((350 - setting.getwidth()) / 2, 370, &setting);//·ÅÈëÉèÖÃ°´Å¥
-	putimage((350 - showing.getwidth()) / 2, 440, &showing);//·ÅÈëÓÎÏ·Íæ·¨°´Å¥*/
+	putimage(0, 0, &background);//æ”¾å…¥èƒŒæ™¯å›¾
+	putimage((350 - title.getwidth()) / 2, 100, &title, SRCPAINT);  //æ”¾å…¥æ ‡é¢˜å›¾ç‰‡,ä¸èƒŒæ™¯å–or
+	putimage((350 - start.getwidth()) / 2, 230, &start);//æ”¾å…¥å¼€å§‹æŒ‰é’®
+	putimage((350 - ranking.getwidth()) / 2, 300, &ranking);//æ”¾å…¥æ’è¡Œæ¦œæŒ‰é’®
+	putimage((350 - setting.getwidth()) / 2, 370, &setting);//æ”¾å…¥è®¾ç½®æŒ‰é’®
+	putimage((350 - showing.getwidth()) / 2, 440, &showing);//æ”¾å…¥æ¸¸æˆç©æ³•æŒ‰é’®*/
 
 
-	/*if (t/100 < 255)      //ÕâÀïÀíÂÛÉÏÆäÊµ¿ÉÒÔÈÃÑ©»¨±ä»¯ÑÕÉ«£¬²»ÖªÎªºÎÃ»ÓĞĞ§¹û
+	/*if (t/100 < 255)      //è¿™é‡Œç†è®ºä¸Šå…¶å®å¯ä»¥è®©é›ªèŠ±å˜åŒ–é¢œè‰²ï¼Œä¸çŸ¥ä¸ºä½•æ²¡æœ‰æ•ˆæœ
 	{
 		setfillcolor(t/100);
 		t++;
@@ -112,24 +112,24 @@ void init() //ÔØÈëÖ÷½çÃæ±³¾°
 
 }
 
-int choose()    //ÕâÀïÊÇ¸öËÀÑ­»·²¶×½Êó±êÊÂ¼şµÄº¯Êı¡£ËùÒÔ»á¿¼ÂÇÓÃÏß³Ì
+int choose()    //è¿™é‡Œæ˜¯ä¸ªæ­»å¾ªç¯æ•æ‰é¼ æ ‡äº‹ä»¶çš„å‡½æ•°ã€‚æ‰€ä»¥ä¼šè€ƒè™‘ç”¨çº¿ç¨‹
 {
 	int n = 0;
 	while (1)
 	{
 		m = getmessage();
-		if (m.message == WM_LBUTTONDOWN)   //Èç¹ûÊó±ê×ó¼ü°´ÏÂÁË
+		if (m.message == WM_LBUTTONDOWN)   //å¦‚æœé¼ æ ‡å·¦é”®æŒ‰ä¸‹äº†
 		{
-			if (m.x >= 123 && m.x <= 227 && m.y >= 230 && m.y <= 286) n = 1;	//¿ªÊ¼
-			if (m.x >= 123 && m.x <= 227 && m.y >= 300 && m.y <= 357) n = 2;	//ÅÅĞĞ°ñ
-			if (m.x >= 123 && m.x <= 227 && m.y >= 370 && m.y <= 426) n = 3;	//ÉèÖÃ
-			if (m.x >= 123 && m.x <= 227 && m.y >= 440 && m.y <= 496) n = 4;	//ÓÎÏ·ËµÃ÷
+			if (m.x >= 123 && m.x <= 227 && m.y >= 230 && m.y <= 286) n = 1;	//å¼€å§‹
+			if (m.x >= 123 && m.x <= 227 && m.y >= 300 && m.y <= 357) n = 2;	//æ’è¡Œæ¦œ
+			if (m.x >= 123 && m.x <= 227 && m.y >= 370 && m.y <= 426) n = 3;	//è®¾ç½®
+			if (m.x >= 123 && m.x <= 227 && m.y >= 440 && m.y <= 496) n = 4;	//æ¸¸æˆè¯´æ˜
 
-			if (n) //Ö»ÓĞn²»µÈÓÚ0µÄÊ±ºò£¬ËµÃ÷Êó±ê°´ÁËÆäÖĞÒ»¸ö°´Å¥£¬²ÅÄÜÌø³öÑ­»·
+			if (n) //åªæœ‰nä¸ç­‰äº0çš„æ—¶å€™ï¼Œè¯´æ˜é¼ æ ‡æŒ‰äº†å…¶ä¸­ä¸€ä¸ªæŒ‰é’®ï¼Œæ‰èƒ½è·³å‡ºå¾ªç¯
 			{
 
-				flag_init = 1;  //°ÑflagÖÃ1£¬¸æËß×ÓÏß³Ì£¬ĞèÒªÍ£Ö¹ÁË
-				Sleep(10); //Õâ¸öµØ·½±È½Ï¹Ø¼ü£¬ÒòÎª×ÓÏß³ÌÊÇÃ¿¸ôÒ»¶ÎÊ±¼ä¼ì²éÒ»ÏÂflag¡£Èç¹ûÎÒ¸Õ°ÑflagÖÃ1¾Íreturn£¬¿ÉÄÜ×ÓÏß³Ì»¹Ã»À´µÃ¼°Í£Ö¹¡£¾Í»áËÀ»ú
+				flag_init = 1;  //æŠŠflagç½®1ï¼Œå‘Šè¯‰å­çº¿ç¨‹ï¼Œéœ€è¦åœæ­¢äº†
+				Sleep(10); //è¿™ä¸ªåœ°æ–¹æ¯”è¾ƒå…³é”®ï¼Œå› ä¸ºå­çº¿ç¨‹æ˜¯æ¯éš”ä¸€æ®µæ—¶é—´æ£€æŸ¥ä¸€ä¸‹flagã€‚å¦‚æœæˆ‘åˆšæŠŠflagç½®1å°±returnï¼Œå¯èƒ½å­çº¿ç¨‹è¿˜æ²¡æ¥å¾—åŠåœæ­¢ã€‚å°±ä¼šæ­»æœº
 				return n;
 			}
 		}
@@ -137,97 +137,103 @@ int choose()    //ÕâÀïÊÇ¸öËÀÑ­»·²¶×½Êó±êÊÂ¼şµÄº¯Êı¡£ËùÒÔ»á¿¼ÂÇÓÃÏß³Ì
 
 }
 
-/*
-void login() {
-	loadimage(&ranking, "./source/confirm2.png"); // È·¶¨µÄÍ¼Æ¬
+
+bool login() {
+	bool ifBack = false;
+	loadimage(&ranking, "./source/confirm2.png"); // ç¡®å®šçš„å›¾ç‰‡
 	putimage(60, 350, &ranking, SRCPAINT);
-	loadimage(&ranking, "./source/skip2.png"); // Ìø¹ıµÄÍ¼Æ¬
+	loadimage(&ranking, "./source/skip2.png"); // è·³è¿‡çš„å›¾ç‰‡
 	putimage(220, 350, &ranking, SRCPAINT);
-	putimage(250, 550, &goback); // ·ÅÈëºóÍË°´Å¥
-	RECT r = { 30, 0, 320, 479 }; // ÎÄ×ÖÎ»ÖÃ
-	RECT rcin = { 100, 0, 320, 550 }; // ÊäÈëµÄêÇ³ÆÎ»ÖÃ
-	drawtext(_T("ÇëÊäÈëÓÎÏ·êÇ³Æ:"), &r, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+	putimage(250, 550, &goback); // æ”¾å…¥åé€€æŒ‰é’®
+	RECT r = { 30, 0, 320, 479 }; // æ–‡å­—ä½ç½®
+	RECT rcin = { 100, 0, 320, 550 }; // è¾“å…¥çš„æ˜µç§°ä½ç½®
+	drawtext(_T("è¯·è¾“å…¥æ¸¸æˆæ˜µç§°:"), &r, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 	while (1) {
 		flushmessage();
-		m = getmessage(EM_KEY | EM_CHAR | EM_MOUSE); // ¼üÅÌºÍÊó±êÊÂ¼ş¼ì²â
+		m = getmessage(EM_KEY | EM_CHAR | EM_MOUSE); // é”®ç›˜å’Œé¼ æ ‡äº‹ä»¶æ£€æµ‹
 		if (m.message == WM_KEYDOWN || m.message == WM_CHAR) {
-			if ((m.vkcode >= 48 && m.vkcode <= 57) || (m.vkcode >= 65 && m.vkcode <= 90)) { // ÅĞ¶ÏÎª×ÖÄ¸Êı×Ö¾ÍÊäÈëêÇ³ÆÖĞ
+			if ((m.vkcode >= 48 && m.vkcode <= 57) || (m.vkcode >= 65 && m.vkcode <= 90)) { // åˆ¤æ–­ä¸ºå­—æ¯æ•°å­—å°±è¾“å…¥æ˜µç§°ä¸­
 				nickname += tolower(m.ch);
 				drawtext(_T(nickname.data()), &rcin, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 			}
-			else if (m.vkcode == 13) { // »Ø³µÈ·¶¨
+			else if (m.vkcode == 13) { // å›è½¦ç¡®å®š
 				if (nickname == "") nickname = "admin";
 				drawtext(_T(nickname.data()), &rcin, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
-				break; // Ğè¸Ä¶¯
+				break; // éœ€æ”¹åŠ¨
 			}
-			else if (m.vkcode == 8) { // ÍË»ØÒ»¸ö×Ö·û
-				// ÖØĞÂ¼ÓÔØÍ¼Æ¬¡£¡£¡£
+			else if (m.vkcode == 8) { // é€€å›ä¸€ä¸ªå­—ç¬¦
+				// é‡æ–°åŠ è½½å›¾ç‰‡ã€‚ã€‚ã€‚
 				putimage(0, 0, &background);
-				loadimage(&ranking, "./source/confirm2.png"); // È·¶¨µÄÍ¼Æ¬
+				loadimage(&ranking, "./source/confirm2.png"); // ç¡®å®šçš„å›¾ç‰‡
 				putimage(60, 350, &ranking, SRCPAINT);
-				loadimage(&ranking, "./source/skip2.png"); // Ìø¹ıµÄÍ¼Æ¬
+				loadimage(&ranking, "./source/skip2.png"); // è·³è¿‡çš„å›¾ç‰‡
 				putimage(220, 350, &ranking, SRCPAINT);
-				putimage(250, 550, &goback); //·ÅÈëºóÍË°´Å¥
-				drawtext(_T("ÇëÊäÈëÓÎÏ·êÇ³Æ:"), &r, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+				putimage(250, 550, &goback); //æ”¾å…¥åé€€æŒ‰é’®
+				drawtext(_T("è¯·è¾“å…¥æ¸¸æˆæ˜µç§°:"), &r, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 				nickname = nickname.substr(0, nickname.length() - 1);
 				flushmessage();
 				drawtext(_T(nickname.data()), &rcin, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 			}
 		}
-		else if (m.message == WM_LBUTTONDOWN)   //Èç¹ûÊó±ê×ó¼ü°´ÏÂÁË
+		else if (m.message == WM_LBUTTONDOWN)   //å¦‚æœé¼ æ ‡å·¦é”®æŒ‰ä¸‹äº†
 		{
-			if (m.x >= 250 && m.x <= 330 && m.y >= 550 && m.y <= 578) //backÍ¼Æ¬´æ·ÅµÄÇøÓò
+			if (m.x >= 250 && m.x <= 330 && m.y >= 550 && m.y <= 578) // ç‚¹å‡»back
 			{
-				loadimage(&goback, "./source/back_2.png");//ÔØÈëºóÍË°´Å¥
-				putimage(250, 550, &goback);				//·ÅÈëºóÍË°´Å¥
+				ifBack = true;
+				loadimage(&goback, "./source/back_2.png");//è½½å…¥åé€€æŒ‰é’®
+				putimage(250, 550, &goback);				//æ”¾å…¥åé€€æŒ‰é’®
 				PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME);
-				break;// Ğè¸Ä¶¯
+				break;
 			}
-			else if (m.x >= 60 && m.x <= 147 && m.y >= 350 && m.y <= 393) { // µã»÷È·¶¨
-				loadimage(&ranking, "./source/confirm2.png"); // È·¶¨µÄÍ¼Æ¬
+			else if (m.x >= 60 && m.x <= 147 && m.y >= 350 && m.y <= 393) { // ç‚¹å‡»ç¡®å®š
+				loadimage(&ranking, "./source/confirm2.png"); // ç¡®å®šçš„å›¾ç‰‡
 				putimage(60, 350, &ranking, SRCINVERT);
-				loadimage(&ranking, "./source/confirm.png"); // È·¶¨µÄÍ¼Æ¬
+				loadimage(&ranking, "./source/confirm.png"); // ç¡®å®šçš„å›¾ç‰‡
 				putimage(60, 350, &ranking, SRCPAINT);
 				PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME);
-				break;// Ğè¸Ä¶¯
+				break;
 			}
-			else if (m.x >= 220 && m.x <= 304 && m.y >= 350 && m.y <= 397) { // µã»÷Ìø¹ı
+			else if (m.x >= 220 && m.x <= 304 && m.y >= 350 && m.y <= 397) { // ç‚¹å‡»è·³è¿‡
 				nickname = "admin";
-				loadimage(&ranking, "./source/skip2.png"); // Ìø¹ıµÄÍ¼Æ¬
+				loadimage(&ranking, "./source/skip2.png"); // è·³è¿‡çš„å›¾ç‰‡
 				putimage(220, 350, &ranking, SRCINVERT);
-				loadimage(&ranking, "./source/skip.png"); // Ìø¹ıµÄÍ¼Æ¬
+				loadimage(&ranking, "./source/skip.png"); // è·³è¿‡çš„å›¾ç‰‡
 				putimage(220, 350, &ranking, SRCPAINT);
 				PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME);
-				break;// Ğè¸Ä¶¯
+				break;
 			}
 		}
 	}
-	// Ìí¼ÓÅĞ¶Ï¡£¡£¡£
+	if (ifBack) {
+		ifBack = false;
+		return false;
+	}
+	return true;
 }
-*/
+
 
 void play()
 {
-	//¸Ä±ä¿ªÊ¼°´Å¥
-	loadimage(&start, "./source/start_2.png");			//ÔØÈë¿ªÊ¼°´Å¥
-	putimage((350 - start.getwidth()) / 2, 230, &start);//·ÅÈë¿ªÊ¼°´Å¥
-	PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME); //ÊµÏÖÒôÀÖ²¥·ÅÓĞÁ½¸öº¯Êı£ºplaysoundº¯ÊıĞ§ÂÊ¸ü¸ß£¬ÓÅÏÈÊ¹ÓÃ£»ÁíÒ»¸öÊÇmciSendString£¬ÔÚÖ÷º¯ÊıÖĞÓÃ
-	/*putimage(0, 0, &background);
-	login();
-	_getch();
-	*/
+	//æ”¹å˜å¼€å§‹æŒ‰é’®
+	loadimage(&start, "./source/start_2.png");			//è½½å…¥å¼€å§‹æŒ‰é’®
+	putimage((350 - start.getwidth()) / 2, 230, &start);//æ”¾å…¥å¼€å§‹æŒ‰é’®
+	PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME); //å®ç°éŸ³ä¹æ’­æ”¾æœ‰ä¸¤ä¸ªå‡½æ•°ï¼šplaysoundå‡½æ•°æ•ˆç‡æ›´é«˜ï¼Œä¼˜å…ˆä½¿ç”¨ï¼›å¦ä¸€ä¸ªæ˜¯mciSendStringï¼Œåœ¨ä¸»å‡½æ•°ä¸­ç”¨
+	putimage(0, 0, &background);
+	bool state = login();
+	// system("pause");
+
 	m = getmessage();
-	while (1)
+	while (state)
 	{
 		print();
 		hit_detection();
 		bird_jump();
-		if (m.message == WM_LBUTTONDOWN)   //Èç¹ûÊó±ê×ó¼ü°´ÏÂÁË
-		{ // Êó±ê×ó¼ü
-			if (m.x >= 250 && m.x <= 330 && m.y >= 550 && m.y <= 578) //backÍ¼Æ¬´æ·ÅµÄÇøÓò
+		if (m.message == WM_LBUTTONDOWN)   //å¦‚æœé¼ æ ‡å·¦é”®æŒ‰ä¸‹äº†
+		{ // é¼ æ ‡å·¦é”®
+			if (m.x >= 250 && m.x <= 330 && m.y >= 550 && m.y <= 578) //backå›¾ç‰‡å­˜æ”¾çš„åŒºåŸŸ
 			{
-				loadimage(&goback, "./source/back_2.png");//ÔØÈëºóÍË°´Å¥
-				putimage(250, 550, &goback);				//·ÅÈëºóÍË°´Å¥
+				loadimage(&goback, "./source/back_2.png");//è½½å…¥åé€€æŒ‰é’®
+				putimage(250, 550, &goback);				//æ”¾å…¥åé€€æŒ‰é’®
 				PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME);
 				break;
 			}
@@ -237,41 +243,41 @@ void play()
 
 void print()
 {
-	BeginBatchDraw();// ¿ªÆôÅúÁ¿»æÍ¼Ä£Ê½
-	putimage(0, 0, &background);//±³¾°Í¼Ïñ
-	putimage(250, 550, &goback);//·ÅÈëºóÍË°´Å¥
-	print_obstacle();//»­Öù×Ó
+	BeginBatchDraw();// å¼€å¯æ‰¹é‡ç»˜å›¾æ¨¡å¼
+	putimage(0, 0, &background);//èƒŒæ™¯å›¾åƒ
+	putimage(250, 550, &goback);//æ”¾å…¥åé€€æŒ‰é’®
+	print_obstacle();//ç”»æŸ±å­
 
 
-	putimage(bird_x, bird_y, &bird1[i % 3], NOTSRCERASE); // ÄñµÄ×óÉÏ½Ç×ø±ê bird_x = 150, bird_y = 300, i = 0, k = 0 £»kÊÇµ½5¹é0£¬ÊµÏÖĞ¡Äñ³á°òµÄÑ­»·
+	putimage(bird_x, bird_y, &bird1[i % 3], NOTSRCERASE); // é¸Ÿçš„å·¦ä¸Šè§’åæ ‡ bird_x = 150, bird_y = 300, i = 0, k = 0 ï¼›kæ˜¯åˆ°5å½’0ï¼Œå®ç°å°é¸Ÿç¿…è†€çš„å¾ªç¯
 	putimage(bird_x, bird_y, &bird2[i % 3], SRCINVERT);
 
 	if (k % 5 == 0)
 		i++;
-	k++;        //µ½´ËÎªÖ¹£¬ÊµÏÖÁËĞ¡ÄñÎ»ÖÃµÄ¸üĞÂ
+	k++;        //åˆ°æ­¤ä¸ºæ­¢ï¼Œå®ç°äº†å°é¸Ÿä½ç½®çš„æ›´æ–°
 
 	score_print();
-	putimage(250, 550, &goback);//·ÅÈëºóÍË°´Å¥
+	putimage(250, 550, &goback);//æ”¾å…¥åé€€æŒ‰é’®
 	//EndBatchDraw();
-	FlushBatchDraw();		// »æÖÆ	
+	FlushBatchDraw();		// ç»˜åˆ¶	
 
 }
 
-void print_obstacle()//Öù×ÓÒÆ¶¯¹æÂÉ
+void print_obstacle()//æŸ±å­ç§»åŠ¨è§„å¾‹
 {
 	/*
 	stone_x1 = 0; stone_y1 = 0;
 	cout << stone_up1.getwidth() << "  " << stone_up1.getheight() << endl;    //140 600
-	putimage(stone_x1, stone_y1, &stone_up1);  //ÑÚÂëÍ¼  ÉÏ½ØÖù×Ó×óÏÂ×ø±êÒ»¿ªÊ¼Î´³õÊ¼»¯
-	FlushBatchDraw();		// »æÖÆ
+	putimage(stone_x1, stone_y1, &stone_up1);  //æ©ç å›¾  ä¸ŠæˆªæŸ±å­å·¦ä¸‹åæ ‡ä¸€å¼€å§‹æœªåˆå§‹åŒ–
+	FlushBatchDraw();		// ç»˜åˆ¶
 	_getch();
 	*/
 	Sleep(30);
-	if (stone_x1 > 210)//´ËÊ±»­Ãæ´æÔÚÁ½¸ùÖù×Ó
+	if (stone_x1 > 210)//æ­¤æ—¶ç”»é¢å­˜åœ¨ä¸¤æ ¹æŸ±å­
 	{
-		//Èı¹âÕ¤²Ù×÷
-		putimage(stone_x1, stone_y1, &stone_up2, NOTSRCERASE);  //ÑÚÂëÍ¼  ÉÏ½ØÖù×Ó×óÏÂ×ø±êÒ»¿ªÊ¼Î´³õÊ¼»¯stone_x1, stone_y1:ÉÏ½ØÖù×Ó×óÏÂ×ø±ê    stone_x2, stone_y2:ÉÏ½ØÖù×Ó×óÏÂ×ø±ê
-		putimage(stone_x1, stone_y1, &stone_up1, SRCINVERT);	//¾«ÁéÍ¼	
+		//ä¸‰å…‰æ …æ“ä½œ
+		putimage(stone_x1, stone_y1, &stone_up2, NOTSRCERASE);  //æ©ç å›¾  ä¸ŠæˆªæŸ±å­å·¦ä¸‹åæ ‡ä¸€å¼€å§‹æœªåˆå§‹åŒ–stone_x1, stone_y1:ä¸ŠæˆªæŸ±å­å·¦ä¸‹åæ ‡    stone_x2, stone_y2:ä¸ŠæˆªæŸ±å­å·¦ä¸‹åæ ‡
+		putimage(stone_x1, stone_y1, &stone_up1, SRCINVERT);	//ç²¾çµå›¾	
 		putimage(stone_x1, stone_y1 + 750, &stone_down2, NOTSRCERASE);
 		putimage(stone_x1, stone_y1 + 750, &stone_down1, SRCINVERT);
 		putimage(stone_x2, stone_y2, &stone_up4, NOTSRCERASE);
@@ -280,7 +286,7 @@ void print_obstacle()//Öù×ÓÒÆ¶¯¹æÂÉ
 		putimage(stone_x2, stone_y2 + 750, &stone_down3, SRCINVERT);
 		stone_x1--; stone_x2--;
 	}
-	else if (stone_x1 == 210)//×óÖù×ÓÏûÊ§£¬½«stone_x2,stone_y2Öµ¹éÎ»
+	else if (stone_x1 == 210)//å·¦æŸ±å­æ¶ˆå¤±ï¼Œå°†stone_x2,stone_y2å€¼å½’ä½
 	{
 		stone_x2 = stone_x1;
 		stone_y2 = stone_y1;
@@ -291,7 +297,7 @@ void print_obstacle()//Öù×ÓÒÆ¶¯¹æÂÉ
 		stone_x1--;
 		stone_x2--;
 	}
-	else if (stone_x1 < 210 && stone_x1>0)//»­ÃæÖ»´æÔÚÒ»¸ùÖù×ÓµÄÇé¿ö
+	else if (stone_x1 < 210 && stone_x1>0)//ç”»é¢åªå­˜åœ¨ä¸€æ ¹æŸ±å­çš„æƒ…å†µ
 	{
 		putimage(stone_x1, stone_y1, &stone_up2, NOTSRCERASE);
 		putimage(stone_x1, stone_y1, &stone_up1, SRCINVERT);
@@ -300,7 +306,7 @@ void print_obstacle()//Öù×ÓÒÆ¶¯¹æÂÉ
 		stone_x1--;
 		stone_x2--;
 	}
-	if (stone_x1 == 0)//Öù×Ó×ó¶Ëend£¬Éú³ÉĞÂÖù×Ó
+	if (stone_x1 == 0)//æŸ±å­å·¦ç«¯endï¼Œç”Ÿæˆæ–°æŸ±å­
 	{
 		stone_y1 = rand() % 310 - 600 + 50;
 		stone_x1 = 350;
@@ -341,10 +347,9 @@ void score_print()
 
 void bird_jump()
 {
-
-	// ¿ØÖÆĞ¡ÄñÉÏÉıºÍÏÂ½µ
-	static int control = 0; // ¿ØÖÆ±äÁ¿
-	if (control > 0 && control < 5) { // ¿ØÖÆĞ¡ÄñÖğ½¥ÉÏÉı
+	// æ§åˆ¶å°é¸Ÿä¸Šå‡å’Œä¸‹é™
+	static int control = 0; // æ§åˆ¶å˜é‡
+	if (control > 0 && control < 5) { // æ§åˆ¶å°é¸Ÿé€æ¸ä¸Šå‡
 		bird_y -= 10;
 		++control;
 		return;
@@ -352,26 +357,26 @@ void bird_jump()
 	else if (control == 5) {
 		control = 0;
 	}
-	bird_y += 3; // ÏÂÂä
+	bird_y += 3; // ä¸‹è½
 	int key;
 	if (_kbhit()) {
 		key = _getch();
-		if (key == 32) { // ¿Õ¸ñÌøÔ¾
+		if (key == 32) { // ç©ºæ ¼è·³è·ƒ
 			bird_y -= 10;
 			++control;
 		}
-		else if (key == 27) { // ESCÔİÍ£
+		else if (key == 27) { // ESCæš‚åœ
 			system("pause");
 		}
 	}
 	while (peekmessage(&m, EM_MOUSE)) 
 	{
 		if (m.message == WM_LBUTTONDOWN) 
-		{ // Êó±ê×ó¼ü
+		{ // é¼ æ ‡å·¦é”®
 			bird_y -= 10;
 			++control;
 		}
-		else if (m.message == WM_RBUTTONDOWN) { // Êó±êÓÒ¼ü
+		else if (m.message == WM_RBUTTONDOWN) { // é¼ æ ‡å³é”®
 			system("pause");
 		}
 	}
@@ -384,19 +389,19 @@ void hit_detection()
 	{
 		if ((bird_y > (stone_y1 + 576) && bird_y < (stone_y1 + 600)) || ((bird_y > (stone_y1 + 726)) && bird_y < (stone_y1 + 750)))
 		{
-			endorretry();//½áÊøÓÎÏ·
+			endorretry();//ç»“æŸæ¸¸æˆ
 		}
 	}
 	else if (stone_x1 >= 20 && stone_x1 <= 174)
 	{
 		if (!(bird_y > (stone_y1 + 600) && bird_y < (stone_y1 + 726)))
 		{
-			endorretry();	//½áÊøÓÎÏ·
+			endorretry();	//ç»“æŸæ¸¸æˆ
 		}
 	}
 	if (bird_y > 576)
 	{
-		endorretry();//½áÊøÓÎÏ·
+		endorretry();//ç»“æŸæ¸¸æˆ
 	}
 	if (stone_x1 == 150)
 	{
@@ -410,7 +415,7 @@ void endorretry()
 	{
 		while (bird_y < 550)
 		{
-			putimage(0, 0, &background);//±³¾°Í¼Ïñ
+			putimage(0, 0, &background);//èƒŒæ™¯å›¾åƒ
 			putimage(stone_x1, stone_y1, &stone_up2, NOTSRCERASE);
 			putimage(stone_x1, stone_y1, &stone_up1, SRCINVERT);
 			putimage(stone_x1, stone_y1 + 750, &stone_down2, NOTSRCERASE);
@@ -435,8 +440,8 @@ void endorretry()
 	putimage(0, 0, &background);
 	score_print();
 	FlushBatchDraw();
-	_getch();
-	//µÚÒ»¸ùÖù×Ó
+	system("pause");
+	//ç¬¬ä¸€æ ¹æŸ±å­
 	stone_y1 = rand() % 310 - 555;
 	stone_x1 = 350;
 	stone_x2 = stone_y2 = -9999;
@@ -449,9 +454,9 @@ void endorretry()
 
 void _rank()
 {
-	//¸Ä±äÅÅĞĞ°ñ°´Å¥
-	loadimage(&ranking, "./source/rank_2.png");//ÔØÈëÅÅĞĞ°ñ°´Å¥
-	putimage((350 - ranking.getwidth()) / 2, 300, &ranking);//·ÅÈëÅÅĞĞ°ñ°´Å¥
+	//æ”¹å˜æ’è¡Œæ¦œæŒ‰é’®
+	loadimage(&ranking, "./source/rank_2.png");//è½½å…¥æ’è¡Œæ¦œæŒ‰é’®
+	putimage((350 - ranking.getwidth()) / 2, 300, &ranking);//æ”¾å…¥æ’è¡Œæ¦œæŒ‰é’®
 	PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME);
 
 	putimage(0, 0, &background);
@@ -463,18 +468,18 @@ void _rank()
 
 void set()
 {
-	//¸Ä±äÉèÖÃ°´Å¥
-	loadimage(&setting, "./source/setting_2.png");//ÔØÈëÉèÖÃ°´Å¥
-	putimage((350 - setting.getwidth()) / 2, 370, &setting);//·ÅÈëÉèÖÃ°´Å¥
+	//æ”¹å˜è®¾ç½®æŒ‰é’®
+	loadimage(&setting, "./source/setting_2.png");//è½½å…¥è®¾ç½®æŒ‰é’®
+	putimage((350 - setting.getwidth()) / 2, 370, &setting);//æ”¾å…¥è®¾ç½®æŒ‰é’®
 	PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME);
 	putimage(0, 0, &background);
-	putimage(250, 550, &goback);//·ÅÈëºóÍË°´Å¥
-	//ÔÚÉèÖÃ½çÃæÌí¼Ó×Ö
-	settextstyle(25, 0, "ºÚÌå");
+	putimage(250, 550, &goback);//æ”¾å…¥åé€€æŒ‰é’®
+	//åœ¨è®¾ç½®ç•Œé¢æ·»åŠ å­—
+	settextstyle(25, 0, "é»‘ä½“");
 	settextcolor(WHITE);
 
-	outtextxy(75, 200, "ÓÎÏ·ÒôĞ§£º");
-	outtextxy(75, 300, "±³¾°ÒôÀÖ£º");
+	outtextxy(75, 200, "æ¸¸æˆéŸ³æ•ˆï¼š");
+	outtextxy(75, 300, "èƒŒæ™¯éŸ³ä¹ï¼š");
 
 
 	back();
@@ -483,23 +488,23 @@ void set()
 
 void show()
 {
-	//¸Ä±äÓÎÏ·Íæ·¨°´Å¥
-	loadimage(&showing, "./source/show_2.png");//ÔØÈëÓÎÏ·Íæ·¨°´Å¥
-	putimage((350 - showing.getwidth()) / 2, 440, &showing);//·ÅÈëÓÎÏ·Íæ·¨°´Å¥
+	//æ”¹å˜æ¸¸æˆç©æ³•æŒ‰é’®
+	loadimage(&showing, "./source/show_2.png");//è½½å…¥æ¸¸æˆç©æ³•æŒ‰é’®
+	putimage((350 - showing.getwidth()) / 2, 440, &showing);//æ”¾å…¥æ¸¸æˆç©æ³•æŒ‰é’®
 	PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME);
 
 	putimage(0, 0, &background);
 
-	//Éè¼ÆÓÎÏ·Íæ·¨½çÃæ
+	//è®¾è®¡æ¸¸æˆç©æ³•ç•Œé¢
 	loadimage(&showbackground, "./source/show_background.jpg", 280, 280, true);
 	putimage(35, 20, &showbackground);
 	loadimage(&showbackground, "./source/show_background.jpg", 280, 200, true);
 	putimage(35, 340, &showbackground);
 
 	loadimage(&showbackground, "./source/show_click_mask.jpg", 0, 0, true);
-	putimage(50, 50, &showbackground, SRCAND);//andÑÚÂë
+	putimage(50, 50, &showbackground, SRCAND);//andæ©ç 
 	loadimage(&showbackground, "./source/show_click.png", 0, 0, true);
-	putimage(50, 50, &showbackground, SRCPAINT);//orÔ­ÕÕÆ¬
+	putimage(50, 50, &showbackground, SRCPAINT);//oråŸç…§ç‰‡
 
 	loadimage(&showbackground, "./source/show_space1.png", 0, 0, true);
 	putimage(205, 80, &showbackground);
@@ -507,30 +512,30 @@ void show()
 	loadimage(&showbackground, "./source/show_esc.png", 0, 0, true);
 	putimage(140, 400, &showbackground);
 
-	settextstyle(25, 0, "ºÚÌå");
+	settextstyle(25, 0, "é»‘ä½“");
 	settextcolor(BLACK);
 	Sleep(20);
-	outtextxy(80, 200, "ÌøÔ¾£º ¿Õ¸ñ/×ó¼ü");
-	outtextxy(111, 470, "ÔİÍ££º Esc");
+	outtextxy(80, 200, "è·³è·ƒï¼š ç©ºæ ¼/å·¦é”®");
+	outtextxy(111, 470, "æš‚åœï¼š Esc");
 
 
 	back();
 }
 
 
-void back()//·µ»Øµ½Ö÷½çÃæ
+void back()//è¿”å›åˆ°ä¸»ç•Œé¢
 {
-	putimage(250, 550, &goback);//·ÅÈëºóÍË°´Å¥
+	putimage(250, 550, &goback);//æ”¾å…¥åé€€æŒ‰é’®
 	cout << "back" << endl;
 	while (1)
 	{
 		m = getmessage();
-		if (m.message == WM_LBUTTONDOWN)   //Èç¹ûÊó±ê×ó¼ü°´ÏÂÁË
-		{ // Êó±ê×ó¼ü
-			if (m.x >= 250 && m.x <= 330 && m.y >= 550 && m.y <= 578) //backÍ¼Æ¬´æ·ÅµÄÇøÓò
+		if (m.message == WM_LBUTTONDOWN)   //å¦‚æœé¼ æ ‡å·¦é”®æŒ‰ä¸‹äº†
+		{ // é¼ æ ‡å·¦é”®
+			if (m.x >= 250 && m.x <= 330 && m.y >= 550 && m.y <= 578) //backå›¾ç‰‡å­˜æ”¾çš„åŒºåŸŸ
 			{
-				loadimage(&goback, "./source/back_2.png");//ÔØÈëºóÍË°´Å¥
-				putimage(250, 550, &goback);				//·ÅÈëºóÍË°´Å¥
+				loadimage(&goback, "./source/back_2.png");//è½½å…¥åé€€æŒ‰é’®
+				putimage(250, 550, &goback);				//æ”¾å…¥åé€€æŒ‰é’®
 				PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME);
 				break;
 			}
@@ -539,18 +544,18 @@ void back()//·µ»Øµ½Ö÷½çÃæ
 }
 
 
-DWORD WINAPI init_dynamic(LPVOID)  //×ÓÏß³Ì£¨Ñ©»¨·ÉÎè£©»á½øÈëÕâ¸öº¯Êı
+DWORD WINAPI init_dynamic(LPVOID)  //å­çº¿ç¨‹ï¼ˆé›ªèŠ±é£èˆï¼‰ä¼šè¿›å…¥è¿™ä¸ªå‡½æ•°
 {
 	while (1)
 	{
-		BeginBatchDraw(); //Õâ¸öº¯Êı·ÅÖÃµÄÎ»ÖÃ±È½ÏÖØÒª£¬ËûºÍendbatchdrawÊÇ¸ö×éºÏ¡£ËûÃÇÖ®¼ä³öÏÖµÄ»æÍ¼»áÒ»Æğ³öÏÖ¡£
-		init();				//ÏÈÊÇËùÓĞµÄ±³¾°Í¼ºÍ°´Å¥³öÏÖ
-		for (int i = 0; i < MAXSNOW; i++)	//ËùÓĞµÄÑ©»¨Î»ÖÃ¸üĞÂÍê±Ï
+		BeginBatchDraw(); //è¿™ä¸ªå‡½æ•°æ”¾ç½®çš„ä½ç½®æ¯”è¾ƒé‡è¦ï¼Œä»–å’Œendbatchdrawæ˜¯ä¸ªç»„åˆã€‚ä»–ä»¬ä¹‹é—´å‡ºç°çš„ç»˜å›¾ä¼šä¸€èµ·å‡ºç°ã€‚
+		init();				//å…ˆæ˜¯æ‰€æœ‰çš„èƒŒæ™¯å›¾å’ŒæŒ‰é’®å‡ºç°
+		for (int i = 0; i < MAXSNOW; i++)	//æ‰€æœ‰çš„é›ªèŠ±ä½ç½®æ›´æ–°å®Œæ¯•
 		{
 			MoveSnow(i);
 		}
-		EndBatchDraw();	//ÕâÀï¾Í´ïµ½ÁËÑ©»¨ºÍ±³¾°Í¬Ê±³öÏÖµÄĞ§¹û¡£Ñ©»¨ÊÇÔÚ×îÉÏ²ã
-		if (flag_init)		//×ÓÏß³Ì»áÖØ¸´Ñ­»·£¬Ö±µ½¼ì²âµ½ÓÃ»§°´ÏÂ°´Å¥ÁË->return 0¡£
+		EndBatchDraw();	//è¿™é‡Œå°±è¾¾åˆ°äº†é›ªèŠ±å’ŒèƒŒæ™¯åŒæ—¶å‡ºç°çš„æ•ˆæœã€‚é›ªèŠ±æ˜¯åœ¨æœ€ä¸Šå±‚
+		if (flag_init)		//å­çº¿ç¨‹ä¼šé‡å¤å¾ªç¯ï¼Œç›´åˆ°æ£€æµ‹åˆ°ç”¨æˆ·æŒ‰ä¸‹æŒ‰é’®äº†->return 0ã€‚
 			return 0;
 	}
 	return 1;
@@ -560,9 +565,9 @@ DWORD WINAPI init_dynamic(LPVOID)  //×ÓÏß³Ì£¨Ñ©»¨·ÉÎè£©»á½øÈëÕâ¸öº¯Êı
 
 int main()
 {
-	srand((unsigned)time(NULL));	// Ëæ»úÖÖ×Ó
+	srand((unsigned)time(NULL));	// éšæœºç§å­
 
-	//¼ÓÔØ±³¾°ÒôĞ§£¬ÕâÀïÃ»ÓĞÓÃplaysoundÊÇÒòÎª£¬Èç¹ûºóĞøÒ²ÓÃplaysoundÊµÏÖµ¥»÷ÒôĞ§¡£±³¾°ÒôÀÖ½«»á×Ô¶¯Í£Ö¹¡£
+	//åŠ è½½èƒŒæ™¯éŸ³æ•ˆï¼Œè¿™é‡Œæ²¡æœ‰ç”¨playsoundæ˜¯å› ä¸ºï¼Œå¦‚æœåç»­ä¹Ÿç”¨playsoundå®ç°å•å‡»éŸ³æ•ˆã€‚èƒŒæ™¯éŸ³ä¹å°†ä¼šè‡ªåŠ¨åœæ­¢ã€‚
 	//mciSendString("play ./source/bkmusic.mp3 repeat", NULL, 0, NULL);
 
 	initgraph(350, 600, EW_SHOWCONSOLE);
@@ -570,19 +575,19 @@ int main()
 	SetWindowText(hwnd, "Flappy Bird");
 
 
-	// ³õÊ¼»¯ËùÓĞÑ©»¨
+	// åˆå§‹åŒ–æ‰€æœ‰é›ªèŠ±
 	for (int i = 0; i < MAXSNOW; i++)
 	{
 		InitSnow(i);
-		snow[i].x = rand() % 350;//ÕâÀï×¢Òâµ½£¬Ò»¿ªÊ¼µÄxÊÇËæ»úµÄ£¬ºóĞøµÄ²ÅÊÇ´Ó×î×ó±ß³öÀ´µÄ¡£ËùÒÔ¸Õ½øÓÎÏ·½çÃæÊÇÂúÆÁµÄÑ©»¨¡£
+		snow[i].x = rand() % 350;//è¿™é‡Œæ³¨æ„åˆ°ï¼Œä¸€å¼€å§‹çš„xæ˜¯éšæœºçš„ï¼Œåç»­çš„æ‰æ˜¯ä»æœ€å·¦è¾¹å‡ºæ¥çš„ã€‚æ‰€ä»¥åˆšè¿›æ¸¸æˆç•Œé¢æ˜¯æ»¡å±çš„é›ªèŠ±ã€‚
 	}
 
 
 
 
-	//×ÖÌåÔÚÖ÷º¯ÊıÉèÖÃ£¬ºóĞø¾Í²»ĞèÒªÔÙ¸ÄÁË
-	settextstyle(25, 0, "ºÚÌå");
-	setbkmode(TRANSPARENT);//ÉèÖÃ×ÖÌå±³¾°Í¸Ã÷£¨ÊäÈëºº×ÖÊÇÓĞ±³¾°µÄ£©
+	//å­—ä½“åœ¨ä¸»å‡½æ•°è®¾ç½®ï¼Œåç»­å°±ä¸éœ€è¦å†æ”¹äº†
+	settextstyle(25, 0, "é»‘ä½“");
+	setbkmode(TRANSPARENT);//è®¾ç½®å­—ä½“èƒŒæ™¯é€æ˜ï¼ˆè¾“å…¥æ±‰å­—æ˜¯æœ‰èƒŒæ™¯çš„ï¼‰
 
 	loadimage(&bird2[0], "./source/bird1-2.gif");
 	loadimage(&bird1[0], "./source/bird1-1.gif");
@@ -592,17 +597,17 @@ int main()
 	loadimage(&bird1[2], "./source/bird3-1.gif");
 	loadimage(&bird2[3], "./source/bird4-2.gif");
 	loadimage(&bird1[3], "./source/bird4-1.gif");
-	//Öù×Ó
+	//æŸ±å­
 	loadimage(&stone_up1, "./source/stone_up1.gif");
 	loadimage(&stone_up2, "./source/stone_up2.gif");
 	loadimage(&stone_down1, "./source/stone_down1.gif");
 	loadimage(&stone_down2, "./source/stone_down2.gif");
-	loadimage(&stone_up3, "./source/stone_up1.gif");    //´ú±íµÚ×éÖù×Ó
+	loadimage(&stone_up3, "./source/stone_up1.gif");    //ä»£è¡¨ç¬¬ç»„æŸ±å­
 	loadimage(&stone_up4, "./source/stone_up2.gif");
 	loadimage(&stone_down3, "./source/stone_down1.gif");
 	loadimage(&stone_down4, "./source/stone_down2.gif");
 
-	//Êı×Ö
+	//æ•°å­—
 	loadimage(&score1[0], "./source/0_1.jpg");
 	loadimage(&score2[0], "./source/0_2.jpg");
 	loadimage(&score1[1], "./source/1_1.jpg");
@@ -626,16 +631,16 @@ int main()
 
 	while (1)
 	{
-		//´´½¨Ö÷½çÃæÏß³Ì
+		//åˆ›å»ºä¸»ç•Œé¢çº¿ç¨‹
 		DWORD  init_threadId;
 
-		flag_init = 0; //Ñ­»·»Øµ½Æğµã£¬ËµÃ÷ÓÃ»§·µ»ØÖ÷½çÃæÁË£¬ĞèÒª°ÑflagºÍoptionÖÃ0
+		flag_init = 0; //å¾ªç¯å›åˆ°èµ·ç‚¹ï¼Œè¯´æ˜ç”¨æˆ·è¿”å›ä¸»ç•Œé¢äº†ï¼Œéœ€è¦æŠŠflagå’Œoptionç½®0
 		option = 0;
 
-		CreateThread(NULL, 0, init_dynamic, 0, 0, &init_threadId); //Ã¿´ÎÑ­»·¶¼´´½¨Ïß³Ì£¨Ö®Ç°µÄ¶¼ÒÑ¾­return 0£¬×Ô¶¯ËÀÍöÁË)£¬
-																			  //×ÓÏß³Ì½øÈëµ½ThreadFunc_dynamicº¯Êı
-																			  //¸¸Ïß³Ì¼ÌĞøÏòÏÂÖ´ĞĞ
-		option = choose();//¸¸Ïß³Ì×èÈûÔÚÕâÀï£¬µÈ´ıÓÃ»§µ¥»÷°´Å¥
+		CreateThread(NULL, 0, init_dynamic, 0, 0, &init_threadId); //æ¯æ¬¡å¾ªç¯éƒ½åˆ›å»ºçº¿ç¨‹ï¼ˆä¹‹å‰çš„éƒ½å·²ç»return 0ï¼Œè‡ªåŠ¨æ­»äº¡äº†)ï¼Œ
+																			  //å­çº¿ç¨‹è¿›å…¥åˆ°ThreadFunc_dynamicå‡½æ•°
+																			  //çˆ¶çº¿ç¨‹ç»§ç»­å‘ä¸‹æ‰§è¡Œ
+		option = choose();//çˆ¶çº¿ç¨‹é˜»å¡åœ¨è¿™é‡Œï¼Œç­‰å¾…ç”¨æˆ·å•å‡»æŒ‰é’®
 
 		switch (option)
 		{
