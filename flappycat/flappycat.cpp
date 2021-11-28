@@ -4,7 +4,10 @@
 #include <stdlib.h>
 #include <conio.h>
 #include <time.h>
-#include<string>
+#include <string>
+#include <fstream>
+#include <algorithm>
+#include <vector>
 #include <Windows.h>
 #include<Mmsystem.h>
 #pragma comment(lib,"winmm.lib")
@@ -39,12 +42,13 @@ string nickname = "";   // 玩家昵称
 int option = 0;			//鼠标选择哪个选项
 int flag_init = 0;			//0表示主界面背景（子线程）不结束
 
-int bird_x = 150, bird_y = 300, i = 0, k = 0     ;//鸟的左上角坐标,i是image bird1[]的元素位置，k是到5归0，实现小鸟翅膀的循环
+int bird_x = 150, bird_y = 300, i = 0, k = 0;//鸟的左上角坐标,i是image bird1[]的元素位置，k是到5归0，实现小鸟翅膀的循环
 int score = 0, t = 0;	//socre：分数  t：
 int stone_x1, stone_y1;	//上截柱子左下角坐标
 int stone_x2 = -800, stone_y2;	//下截柱子左上角坐标
 
-IMAGE  title, start, ranking, setting,showing,background,showbackground, goback,  //这些是做主界面新加的
+IMAGE  title, start, ranking, setting, showing, background, showbackground, goback,  //这些是做主界面新加的
+ranking_title, 
 bird1[4], bird2[4], score1[10], score2[10], stone_up1, stone_up2, stone_down1, stone_down2
 , stone_up3, stone_up4, stone_down3, stone_down4;//图片储存变量
 
@@ -91,6 +95,7 @@ void init() //载入主界面背景
 	loadimage(&setting, "./source/setting_1.png");//载入设置按钮
 	loadimage(&showing, "./source/show_1.png");//载入游戏玩法按钮
 	loadimage(&goback, "./source/back_1.png");//载入后退按钮
+	loadimage(&ranking_title, "./source/rankings.png");//载入ranking title
 
 	putimage(0, 0, &background);//放入背景图
 	putimage((350 - title.getwidth()) / 2, 100, &title, SRCPAINT);  //放入标题图片,与背景取or
@@ -147,7 +152,7 @@ bool login() {
 	putimage(250, 550, &goback); // 放入后退按钮
 	RECT r = { 30, 0, 320, 479 }; // 文字位置
 	RECT rcin = { 100, 0, 320, 550 }; // 输入的昵称位置
-	drawtext(_T("请输入游戏昵称:"), &r, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
+	drawtext(_T("Enter your name:"), &r, DT_LEFT | DT_VCENTER | DT_SINGLELINE);
 	while (1) {
 		flushmessage();
 		m = getmessage(EM_KEY | EM_CHAR | EM_MOUSE); // 键盘和鼠标事件检测
@@ -322,7 +327,7 @@ void print_obstacle()//柱子移动规律
 
 void score_print()
 {
-	IMAGE *fen1[6], *fen2[6];
+	IMAGE* fen1[6], * fen2[6];
 	int x0, weishu = 1, i = 0, n = score;
 	if (n == 0)
 	{
@@ -369,9 +374,9 @@ void bird_jump()
 			system("pause");
 		}
 	}
-	while (peekmessage(&m, EM_MOUSE)) 
+	while (peekmessage(&m, EM_MOUSE))
 	{
-		if (m.message == WM_LBUTTONDOWN) 
+		if (m.message == WM_LBUTTONDOWN)
 		{ // 鼠标左键
 			bird_y -= 10;
 			++control;
@@ -451,19 +456,57 @@ void endorretry()
 
 }
 
-
+bool cmp(const pair<string, string> a, const pair<string, string> b) {
+	return atoi(a.second.c_str()) > atoi(b.second.c_str());//自定义的比较函数
+}
 void _rank()
 {
 	//改变排行榜按钮
 	loadimage(&ranking, "./source/rank_2.png");//载入排行榜按钮
 	putimage((350 - ranking.getwidth()) / 2, 300, &ranking);//放入排行榜按钮
 	PlaySound(TEXT("./source/click.wav"), NULL, SND_FILENAME);
-
 	putimage(0, 0, &background);
+
+	putimage((350 - ranking_title.getwidth()) / 2, 50, &ranking_title, SRCPAINT); // 排行标题图片
+
+	// 打开存放排行的文件
+	ifstream in("ranking.txt");
+	string line;
+
+	vector<pair<string, string>> name_score; // 将名字和分数以pair的形式放在vector中
+
+	while (in && getline(in, line)) {
+		// 将文件中的名字和排行以pair形式放到vector中准备排序
+		int tab_idx = line.find('\t');
+		name_score.push_back(make_pair(line.substr(0, tab_idx), line.substr(tab_idx + 1, line.size() - tab_idx - 1)));
+	}
+	in.close();// 用完文件一定要记得关闭~
+
+	sort(name_score.begin(), name_score.end(), cmp); // 排序。按照自定义的排序函数cmp
+
+	// 逐行打印并现实名字和分数
+	int name_x = 90, name_y = 120, score_x = 230, score_y = 120;
+
+	pair<string, string> n_s;
+	for (int i = 1; i <= min(10, name_score.size()); i++) {
+		n_s = name_score[i - 1];
+		// print name
+		outtextxy(name_x, name_y, n_s.first.c_str());
+		name_y += 40;
+		outtextxy(score_x, score_y, n_s.second.c_str());
+		score_y += 40;
+	}
+
+	// 只保存10个分数
+	ofstream out("ranking.txt");
+	for (int i = 1; i <= min(10, name_score.size()); i++) {
+		n_s = name_score[i - 1];
+		out << n_s.first + '\t' + n_s.second << endl;
+	}
+	out.close();
 
 
 	back();
-
 }
 
 void set()
@@ -478,8 +521,8 @@ void set()
 	settextstyle(25, 0, "黑体");
 	settextcolor(WHITE);
 
-	outtextxy(75, 200, "游戏音效：");
-	outtextxy(75, 300, "背景音乐：");
+	outtextxy(75, 200,"游戏音效:");
+	outtextxy(75, 300,"背景音乐:");
 
 
 	back();
